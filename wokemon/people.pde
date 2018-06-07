@@ -6,8 +6,29 @@ class People{
   void display(){
     image(LILPUMP,300,300,200,100);
   }  
+  void displayDrR(){
+    image(DrR,mapX+125,mapY+25,200,100);
+  }
+  void speak(){
+    if(numspeech==3){
+      return;
+    }
+    if(mapY>=205){
+      speak=true;
+    }
+    if(speak==true){
+      Speech=loadImage("/Users/ivandelgado/Desktop/wokemon/speech"+numspeech+".png");
+      image(Speech,50,550,600,100);
+      if(mousePressed==true){
+        numspeech++;
+      }
+    }
+  }
   void change(boolean up,boolean down,boolean left,boolean right,boolean moving){
         if(moving==false){
+          return;
+        }
+        if(speak==true){
           return;
         }
         if(up==true){

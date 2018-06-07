@@ -12,12 +12,21 @@ PImage rundown2;
 PImage rundown3;
 PImage map1;
 PImage LILPUMP;
-int mapX=225;
-int mapY=275;
+PImage DrR;
+PImage Speech;
+int mapX=175;
+int mapY=-965;
+int drX=350;
+int drY=300;
 int maptype=0;
+int numspeech=1;
+boolean speak=false;
 map Map=new map();
 People people=new People();
+Attack attack=new Attack();
 void setup(){
+  Speech=loadImage("/Users/ivandelgado/Desktop/wokemon/speech1.png");
+  DrR=loadImage("/Users/ivandelgado/Desktop/wokemon/DrR.png");
   LILPUMP=loadImage("/Users/ivandelgado/Desktop/wokemon/walkdown2.png");
   map1=loadImage("/Users/ivandelgado/Desktop/wokemon/street.png");
   runup1= loadImage("/Users/ivandelgado/Desktop/wokemon/walkup1.png");
@@ -42,6 +51,14 @@ void draw(){
     Map.change();
     Map.display();
     people.display();
+    people.displayDrR();
+    people.speak();
+    if(numspeech>=3){
+      attack.displayChar();
+      attack.displayOptions();
+      attack.displayhealths();
+      attack.displayEnemy();
+    }
 }
 
 
@@ -67,11 +84,15 @@ void keyPressed(){
       people.change(false,false,false,true,true); 
       if(move("right")==true)
       mapX-=10;
+      System.out.println(mapX+"-"+mapY);
     }
   }  
 }
 boolean move(String way){
   boolean coolio=true;
+  if(speak==true){
+    return false;
+  }
   if(way.equals("right")){ 
     if(maptype==0){
       if(mapY>=-360&&mapY<=-150){
