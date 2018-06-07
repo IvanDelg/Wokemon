@@ -10,7 +10,7 @@ class People{
     image(DrR,mapX+125,mapY+25,200,100);
   }
   void speak(){
-    if(numspeech==3){
+    if(numspeech>4){
       return;
     }
     if(mapY>=205){

@@ -1,3 +1,6 @@
+import ddf.minim.*;
+AudioPlayer player;
+Minim minim;
 int playerposX=width/2;
 int playerposY=height/2;
 PImage runup1;
@@ -14,17 +17,51 @@ PImage map1;
 PImage LILPUMP;
 PImage DrR;
 PImage Speech;
+PImage Character1;
+PImage menu;
+PImage Enemy;
+PImage healthbar;
+PImage healthbar2;
+PImage wokemon;
+PImage pokeball;
+PImage DrRFace;
+int Imagex=100;
+int pokeballX=0;
+int pokeballY=450;
 int mapX=175;
 int mapY=-965;
 int drX=350;
 int drY=300;
 int maptype=0;
 int numspeech=1;
+int menunum=0;
+int attackNum=0;
+int wokemonX=100;
+int wokemonY=250;
+int EnemyHealth=100;
+int WokemonHealth=100;
 boolean speak=false;
+boolean animationover=false;
+boolean arch=false;
+boolean cheat1=false;
+boolean gameover=false;
+boolean catchWoke=false;
+boolean reachhit=false;
+boolean UsedTurn=false;
+String enemyName="lilpump";
+String wokemonName="6ix9ine";
+
+
 map Map=new map();
 People people=new People();
 Attack attack=new Attack();
 void setup(){
+  minim=new Minim(this);
+  player=minim.loadFile("/Users/ivandelgado/Desktop/wokemon/Music1.mp3");
+  DrRFace=loadImage("/Users/ivandelgado/Desktop/wokemon/DrRImage.png");
+  Character1=loadImage("/Users/ivandelgado/Desktop/wokemon/Character.png");
+  menu=loadImage("/Users/ivandelgado/Desktop/wokemon/Menu0.png");
+  Enemy=loadImage("/Users/ivandelgado/Desktop/wokemon/Lilpump.png");
   Speech=loadImage("/Users/ivandelgado/Desktop/wokemon/speech1.png");
   DrR=loadImage("/Users/ivandelgado/Desktop/wokemon/DrR.png");
   LILPUMP=loadImage("/Users/ivandelgado/Desktop/wokemon/walkdown2.png");
@@ -39,26 +76,34 @@ void setup(){
   runright2= loadImage("/Users/ivandelgado/Desktop/wokemon/walkright2.png");
   runleft1= loadImage("/Users/ivandelgado/Desktop/wokemon/walkleft1.png");
   runleft2= loadImage("/Users/ivandelgado/Desktop/wokemon/walkleft2.png");
+  pokeball=loadImage("/Users/ivandelgado/Desktop/wokemon/pokeball.png");
+  wokemon=loadImage("/Users/ivandelgado/Desktop/wokemon/6ix9ineBack.png");
+  Character1=loadImage("/Users/ivandelgado/Desktop/wokemon/Character.png");
+  menu=loadImage("/Users/ivandelgado/Desktop/wokemon/Menu0.png");
+  Enemy=loadImage("/Users/ivandelgado/Desktop/wokemon/Lilpump.png");
+  healthbar=loadImage("/Users/ivandelgado/Desktop/wokemon/100per.png");
+  healthbar2=loadImage("/Users/ivandelgado/Desktop/wokemon/100per.png");
   size(700,700);  
   frameRate(30);
-  //background(255);
-  //image(runup1,10,10,300,200);
 }
 
 
 void draw(){
   background(0);
-    Map.change();
+    if(gameover==true){    
+      image(DrRFace,-100,-500,3000,3000);
+      return;
+    }
     Map.display();
     people.display();
     people.displayDrR();
     people.speak();
-    if(numspeech>=3){
+    if(numspeech>3){
       attack.displayChar();
       attack.displayOptions();
-      attack.displayhealths();
-      attack.displayEnemy();
+      attack.animation();
     }
+   
 }
 
 
@@ -84,7 +129,13 @@ void keyPressed(){
       people.change(false,false,false,true,true); 
       if(move("right")==true)
       mapX-=10;
-      System.out.println(mapX+"-"+mapY);
+    }
+    
+    if(keyCode==SHIFT){
+      if(mapX==55&&mapY==-995){
+        System.out.println("You showed them the money, got the lay of the land, and pushed to github so you won");
+        gameover=true;
+      }
     }
   }  
 }
@@ -192,7 +243,14 @@ boolean move(String way){
             coolio=true;
           }        
         }//car3
-      } 
+      }
+      if(coolio==true){
+        if(mapX>=55&&mapX<=290){
+          if(mapY-10<=-1005){
+            coolio=false;
+          }
+        } 
+      }
     }
   }
   if(way.equals("up")){ 
